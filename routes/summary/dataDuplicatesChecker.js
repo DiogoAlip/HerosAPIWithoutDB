@@ -12,7 +12,7 @@ const dataDuplicatesChecker = async (data) => {
         : await fs.readFile(villianDataPath, "utf-8");
     const findInArray =
       characters &&
-      Object.entries(characters).filter(
+      Object.entries(JSON.parse(characters)).filter(
         ([key, value]) =>
           (key == "name" && value == data.name) ||
           (key == "alias" && value == data.alias) ||

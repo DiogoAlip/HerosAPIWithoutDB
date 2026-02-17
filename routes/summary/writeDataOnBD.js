@@ -5,9 +5,9 @@ const HeroDataPath = path.join(__dirname, "../../DB/HeroData.json");
 const VillianDataPath = path.join(__dirname, "../../DB/VillianData.json");
 
 const writeDataOnBD = (dataForWrite) => {
-  if (dataForWrite.type == "hero") {
+  if (false && dataForWrite.type == "hero") {
     fs.appendFile(HeroDataPath, JSON.stringify(dataForWrite));
-  } else {
+  } else if (false) {
     fs.appendFile(VillianDataPath, JSON.stringify(dataForWrite));
   }
 };

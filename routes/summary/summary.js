@@ -53,7 +53,7 @@ const summary = (method, req, res) => {
           return;
         }
 
-        //writeNewDataOnBD(data);
+        writeNewDataOnBD(data);
         res.writeHead(201, {
           "Content-Type": "application/json; charset=utf-8",
         });
