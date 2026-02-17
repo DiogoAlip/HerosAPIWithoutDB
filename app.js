@@ -7,7 +7,6 @@ const NotFoundPagePath = path.join(
   "./routes/not-found/NotFound.html",
 );
 const HomePagePath = path.join(__dirname, "./routes/root/HomePage.html");
-const BDpath = path.join(__dirname, "./DB/DataBase.json");
 
 const serverApp = (req, res) => {
   const { method, url } = req;

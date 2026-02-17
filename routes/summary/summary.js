@@ -1,6 +1,8 @@
 const path = require("path");
 const fs = require("fs");
 const dataSchemaCheker = require("./dataSchemaChecker.js");
+const writeNewDataOnBD = require("./writeDataOnBD.js");
+const duplicatedCheck = require("./dataDuplicatesChecker.js");
 
 const BDpath = path.join(__dirname, "../../DB/DataBase.json");
 
@@ -27,9 +29,10 @@ const summary = (method, req, res) => {
         body += chunk.toString();
       });
 
-      req.on("end", () => {
+      req.on("end", async () => {
         const data = JSON.parse(body);
-        const check = Array.isArray(data)
+        const isDataAnArray = Array.isArray(data);
+        const check = isDataAnArray
           ? data.map((dat) => dataSchemaCheker(dat)).join("\n")
           : dataSchemaCheker(data);
 
@@ -39,10 +42,21 @@ const summary = (method, req, res) => {
           return;
         }
 
+        const itExists = await duplicatedCheck(data);
+        if (itExists) {
+          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
+          res.end(
+            typeof itExists == "boolean"
+              ? "The charater already exist"
+              : itExists,
+          );
+          return;
+        }
+
+        //writeNewDataOnBD(data);
         res.writeHead(201, {
           "Content-Type": "application/json; charset=utf-8",
         });
-
         res.end(JSON.stringify(data));
       });
       break;

@@ -1,4 +1,3 @@
-const { type } = require("node:os");
 const { character } = require("../../DB/heroSchema.js");
 
 const dataSchemaCheker = (data) => {
