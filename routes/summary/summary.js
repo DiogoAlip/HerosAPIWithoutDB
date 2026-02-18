@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const dataSchemaCheker = require("./dataSchemaChecker.js");
-const writeNewDataOnBD = require("./writeDataOnBD.js");
+const writeNewDataOnBD = require("../../controllers/writeDataOnBD.js");
 const duplicatedCheck = require("./dataDuplicatesChecker.js");
 
 const BDpath = path.join(__dirname, "../../DB/DataBase.json");
@@ -53,11 +53,11 @@ const summary = (method, req, res) => {
           return;
         }
 
-        writeNewDataOnBD(data);
+        const dataWithId = await writeNewDataOnBD(data);
         res.writeHead(201, {
           "Content-Type": "application/json; charset=utf-8",
         });
-        res.end(JSON.stringify(data));
+        res.end(JSON.stringify(dataWithId));
       });
       break;
     case "PUT":

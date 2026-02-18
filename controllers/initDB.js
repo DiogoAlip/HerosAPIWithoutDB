@@ -1,25 +1,12 @@
 const path = require("path");
 const { writeFile, readFile } = require("fs/promises");
-
-const SummaryDefault = {
-  MarvelCharacters: 0,
-  DCcharacters: 0,
-  MarvelVillains: 0,
-  DCvillains: 0,
-  MarvelHeroes: 0,
-  DCvillains: 0,
-  TotalMarvelCharacters: 0,
-  TotalDCcharacters: 0,
-  TotalHeroes: 0,
-  TotalVillains: 0,
-  TotalCharacters: 0,
-};
+const SummaryDefault = require("../DB/summarySchema.js");
 
 const initDB = async () => {
   const principalDBs = ["HeroData", "VillianData", "SummaryData"];
 
   for (const db of principalDBs) {
-    const dbPath = path.join(__dirname, `${db}.json`);
+    const dbPath = path.join(__dirname, `../DB/${db}.json`);
     const dataForWrite =
       db == "SummaryData" ? JSON.stringify(SummaryDefault) : "[]";
     try {

@@ -1,6 +1,6 @@
 const http = require("http");
 const { serverFunc } = require("./app.js");
-const initDB = require("./DB/initDB.js");
+const initDB = require("./controllers/initDB.js");
 
 const port = process.env.PORT ?? 8080;
 
