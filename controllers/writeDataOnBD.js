@@ -1,8 +1,10 @@
 const fs = require("fs/promises");
 const path = require("path");
-const SummaryDataPath = path.join(__dirname, "../../DB/SummaryData.json");
-const HeroDataPath = path.join(__dirname, "../../DB/HeroData.json");
-const VillianDataPath = path.join(__dirname, "../../DB/VillianData.json");
+const summaryNewCharacters = require("./summaryNewCharacters.js");
+
+const SummaryDataPath = path.join(__dirname, "../DB/SummaryData.json");
+const HeroDataPath = path.join(__dirname, "../DB/HeroData.json");
+const VillianDataPath = path.join(__dirname, "../DB/VillianData.json");
 
 const writeDataOnBD = async (dataForWrite) => {
   const dataToArray = Array.isArray(dataForWrite)
@@ -10,6 +12,8 @@ const writeDataOnBD = async (dataForWrite) => {
     : [dataForWrite];
   try {
     const SummaryData = JSON.parse(await fs.readFile(SummaryDataPath, "utf-8"));
+    const HeroData = JSON.parse(await fs.readFile(HeroDataPath, "utf-8"));
+    const VillianData = JSON.parse(await fs.readFile(VillianDataPath, "utf-8"));
 
     const { MarvelCharacters, DCcharacters } = SummaryData;
     const dataWithID = dataToArray.map((data, index) => ({
@@ -25,11 +29,22 @@ const writeDataOnBD = async (dataForWrite) => {
     );
     const newHeroData = dataWithID.filter((hero) => hero.type == "hero");
 
+    summaryNewCharacters(dataWithID);
+
+    if (newHeroData.length > 0) {
+      await fs.writeFile(
+        HeroDataPath,
+        JSON.stringify([...HeroData, ...newHeroData]),
+      );
+    }
+
+    if (newVillianData.length > 0) {
+      await fs.writeFile(
+        VillianDataPath,
+        JSON.stringify([...VillianData, ...newVillianData]),
+      );
+    }
     return dataWithID;
-    fs.appendFile(
-      dataForWrite.type == "hero" ? HeroDataPath : VillianDataPath,
-      JSON.stringify(dataForWrite),
-    );
   } catch (error) {
     return error;
   }

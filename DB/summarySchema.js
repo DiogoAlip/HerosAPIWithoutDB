@@ -5,8 +5,6 @@ const SummaryDefault = {
   DCvillains: 0,
   MarvelHeroes: 0,
   DCheroes: 0,
-  TotalMarvelCharacters: 0,
-  TotalDCcharacters: 0,
   TotalHeroes: 0,
   TotalVillains: 0,
   TotalCharacters: 0,

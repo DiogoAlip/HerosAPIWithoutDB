@@ -4,7 +4,7 @@ const dataSchemaCheker = require("./dataSchemaChecker.js");
 const writeNewDataOnBD = require("../../controllers/writeDataOnBD.js");
 const duplicatedCheck = require("./dataDuplicatesChecker.js");
 
-const BDpath = path.join(__dirname, "../../DB/DataBase.json");
+const BDpath = path.join(__dirname, "../../DB/SummaryData.json");
 
 const summary = (method, req, res) => {
   switch (method) {
