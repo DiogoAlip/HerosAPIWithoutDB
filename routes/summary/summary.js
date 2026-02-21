@@ -42,18 +42,14 @@ const summary = (method, req, res) => {
           return;
         }
 
-        const itExists = await duplicatedCheck(data);
+        const itExists = await duplicatedCheck([data]);
         if (itExists) {
           res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-          res.end(
-            typeof itExists == "boolean"
-              ? "The charater already exist"
-              : itExists,
-          );
+          res.end("The charater already exist");
           return;
         }
 
-        const dataWithId = await writeNewDataOnBD(data);
+        const dataWithId = await writeNewDataOnBD([data]);
         res.writeHead(201, {
           "Content-Type": "application/json; charset=utf-8",
         });

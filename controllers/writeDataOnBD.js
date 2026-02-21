@@ -7,16 +7,13 @@ const HeroDataPath = path.join(__dirname, "../DB/HeroData.json");
 const VillianDataPath = path.join(__dirname, "../DB/VillianData.json");
 
 const writeDataOnBD = async (dataForWrite) => {
-  const dataToArray = Array.isArray(dataForWrite)
-    ? dataForWrite
-    : [dataForWrite];
   try {
     const SummaryData = JSON.parse(await fs.readFile(SummaryDataPath, "utf-8"));
     const HeroData = JSON.parse(await fs.readFile(HeroDataPath, "utf-8"));
     const VillianData = JSON.parse(await fs.readFile(VillianDataPath, "utf-8"));
 
     const { MarvelCharacters, DCcharacters } = SummaryData;
-    const dataWithID = dataToArray.map((data, index) => ({
+    const dataWithID = dataForWrite.map((data, index) => ({
       id:
         data.publisher == "Marvel"
           ? `Marvel-${MarvelCharacters + index + 1}`

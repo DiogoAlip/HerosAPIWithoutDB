@@ -6,20 +6,28 @@ const villianDataPath = path.join(__dirname, "../../DB/VillianData.json");
 
 const dataDuplicatesChecker = async (data) => {
   try {
-    const characters =
-      data.type == "hero"
-        ? await fs.readFile(heroDataPath, "utf-8")
-        : await fs.readFile(villianDataPath, "utf-8");
-    const findInArray =
-      characters &&
-      Object.entries(JSON.parse(characters)).filter(
-        ([key, value]) =>
-          (key == "name" && value == data.name) ||
-          (key == "alias" && value == data.alias) ||
-          (key == "image" && value == data.image),
-      ).length;
-    return !!findInArray;
+    const herosData = JSON.parse(await fs.readFile(heroDataPath, "utf-8"));
+    const villianData = JSON.parse(await fs.readFile(villianDataPath, "utf-8"));
+
+    const validator = data.map((item) => {
+      const repitedHeros = herosData.filter(
+        (hero) =>
+          hero.alias == item.alias ||
+          hero.name == item.name ||
+          hero.image == item.image,
+      );
+      const repitedVillains = villianData.filter(
+        (villian) =>
+          villian.alias == item.alias ||
+          villian.name == item.name ||
+          villian.image == item.image,
+      );
+      !!repitedHeros.length && !!repitedVillains.length;
+    });
+
+    return validator;
   } catch (error) {
+    console.log(error);
     return error;
   }
 };
