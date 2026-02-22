@@ -1,8 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const dataSchemaCheker = require("./dataSchemaChecker.js");
-const writeNewDataOnBD = require("../../controllers/writeDataOnBD.js");
-const duplicatedCheck = require("./dataDuplicatesChecker.js");
+const PostMethod = require("../../methods/post.method.js");
 
 const BDpath = path.join(__dirname, "../../DB/SummaryData.json");
 
@@ -32,26 +30,7 @@ const summary = (method, req, res) => {
       req.on("end", async () => {
         const data = JSON.parse(body);
         const dataArray = Array.isArray(data) ? data : [data];
-        const check = dataArray.map((dat) => dataSchemaCheker(dat)).join("\n");
-
-        if (check.includes((checkItem) => typeof checkItem === "string")) {
-          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-          res.end(check);
-          return;
-        }
-
-        const itAlreadyExists = await duplicatedCheck(dataArray);
-        if (itAlreadyExists.includes(true)) {
-          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-          res.end("The charater already exist");
-          return;
-        }
-
-        const dataWithId = await writeNewDataOnBD(dataArray);
-        res.writeHead(201, {
-          "Content-Type": "application/json; charset=utf-8",
-        });
-        res.end(JSON.stringify(dataWithId));
+        PostMethod(res, dataArray);
       });
       break;
     case "PUT":

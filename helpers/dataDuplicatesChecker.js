@@ -1,8 +1,8 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-const heroDataPath = path.join(__dirname, "../../DB/HeroData.json");
-const villianDataPath = path.join(__dirname, "../../DB/VillianData.json");
+const heroDataPath = path.join(__dirname, "../DB/HeroData.json");
+const villianDataPath = path.join(__dirname, "../DB/VillianData.json");
 
 const dataDuplicatesChecker = async (data) => {
   try {

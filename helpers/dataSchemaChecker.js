@@ -1,4 +1,4 @@
-const { character } = require("../../DB/heroSchema.js");
+const { character } = require("../DB/heroSchema.js");
 
 const dataSchemaCheker = (data) => {
   if (typeof data === "[object Object]") {
