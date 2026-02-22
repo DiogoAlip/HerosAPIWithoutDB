@@ -9,7 +9,7 @@ const dataDuplicatesChecker = async (data) => {
     const herosData = JSON.parse(await fs.readFile(heroDataPath, "utf-8"));
     const villianData = JSON.parse(await fs.readFile(villianDataPath, "utf-8"));
 
-    const validator = data.map((item) => {
+    const validators = data.map((item) => {
       const repitedHeros = herosData.filter(
         (hero) =>
           hero.alias == item.alias ||
@@ -22,10 +22,9 @@ const dataDuplicatesChecker = async (data) => {
           villian.name == item.name ||
           villian.image == item.image,
       );
-      !!repitedHeros.length && !!repitedVillains.length;
+      return !!repitedHeros.length || !!repitedVillains.length;
     });
-
-    return validator;
+    return validators;
   } catch (error) {
     console.log(error);
     return error;

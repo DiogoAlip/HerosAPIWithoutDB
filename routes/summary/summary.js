@@ -31,25 +31,23 @@ const summary = (method, req, res) => {
 
       req.on("end", async () => {
         const data = JSON.parse(body);
-        const isDataAnArray = Array.isArray(data);
-        const check = isDataAnArray
-          ? data.map((dat) => dataSchemaCheker(dat)).join("\n")
-          : dataSchemaCheker(data);
+        const dataArray = Array.isArray(data) ? data : [data];
+        const check = dataArray.map((dat) => dataSchemaCheker(dat)).join("\n");
 
-        if (typeof check === "string") {
+        if (check.includes((checkItem) => typeof checkItem === "string")) {
           res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
           res.end(check);
           return;
         }
 
-        const itExists = await duplicatedCheck([data]);
-        if (itExists) {
+        const itAlreadyExists = await duplicatedCheck(dataArray);
+        if (itAlreadyExists.includes(true)) {
           res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
           res.end("The charater already exist");
           return;
         }
 
-        const dataWithId = await writeNewDataOnBD([data]);
+        const dataWithId = await writeNewDataOnBD(dataArray);
         res.writeHead(201, {
           "Content-Type": "application/json; charset=utf-8",
         });
