@@ -1,13 +1,13 @@
 const dataDuplicatesChecker = require("../helpers/dataDuplicatesChecker");
 const dataSchemaCheker = require("../helpers/dataSchemaChecker");
-const writeNewDataOnBD = require("../controllers/writeDataOnBD.js");
+const writeNewDataOnBD = require("../controllers/writeNewDataOnBD.js");
 
 const onPostMethod = async (res, data) => {
-  const check = data.map((dat) => dataSchemaCheker(dat)).join("\n");
+  const check = data.map((dat) => dataSchemaCheker(dat));
 
-  if (check.includes((checkItem) => typeof checkItem === "string")) {
+  if (check.some((checkItem) => typeof checkItem === "string")) {
     res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-    res.end(check);
+    res.end(check.join("\n"));
     return;
   }
 

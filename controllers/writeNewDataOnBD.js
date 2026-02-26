@@ -6,7 +6,7 @@ const SummaryDataPath = path.join(__dirname, "../DB/SummaryData.json");
 const HeroDataPath = path.join(__dirname, "../DB/HeroData.json");
 const VillianDataPath = path.join(__dirname, "../DB/VillianData.json");
 
-const writeDataOnBD = async (dataForWrite) => {
+const writeNewDataOnBD = async (dataForWrite) => {
   try {
     const SummaryData = JSON.parse(await fs.readFile(SummaryDataPath, "utf-8"));
     const HeroData = JSON.parse(await fs.readFile(HeroDataPath, "utf-8"));
@@ -46,4 +46,4 @@ const writeDataOnBD = async (dataForWrite) => {
     return error;
   }
 };
-module.exports = writeDataOnBD;
+module.exports = writeNewDataOnBD;

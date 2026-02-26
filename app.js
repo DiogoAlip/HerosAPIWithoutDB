@@ -10,8 +10,14 @@ const HomePagePath = path.join(__dirname, "./routes/root/HomePage.html");
 
 const serverApp = (req, res) => {
   const { method, url } = req;
-  console.log(`${method}(${typeof method}) on ${url} (${typeof url})`);
-  switch (url) {
+
+  const baseURL = `http://${req.headers.host}`;
+  const parsedUrl = new URL(url, baseURL);
+
+  const pathName = parsedUrl.pathname;
+
+  console.log(`${method}(${typeof method}) on ${pathName} (${typeof url})`);
+  switch (pathName) {
     case "/":
       res.statusCode = 200;
       res.setHeader("Content-Type", "text/html; charset=utf-8");
