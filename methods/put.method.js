@@ -1,11 +1,12 @@
 const fs = require("fs/promises");
 const path = require("path");
 const dataSchemaCheker = require("../helpers/dataSchemaChecker");
-const dataDuplicatesChecker = require("../helpers/dataDuplicatesChecker");
 const heroDataPath = path.join(__dirname, "../DB/HeroData.json");
 const villainDataPath = path.join(__dirname, "../DB/VillianData.json");
+const PutFailedPath = path.join(__dirname, "../routes/summary/PutFailed.html");
 
 const onPutMethod = async (res, data) => {
+  const PutFailedPage = await fs.readFile(PutFailedPath);
   const isIncludeId = data.filter((dat) => !dat["id"]);
 
   if (!!isIncludeId.length) {
@@ -41,19 +42,30 @@ const onPutMethod = async (res, data) => {
       const heroParsedData = JSON.parse(await fs.readFile(heroDataPath));
       const newHeroData = heroParsedData.map(
         (hero) =>
-          data.find((d) => d.id == hero.id && d.name == hero.name) ?? hero,
+          data.find(
+            (d) =>
+              d.id === hero.id &&
+              d.type === hero.type &&
+              !(
+                d.image === hero.image ||
+                d.publisher === hero.publisher ||
+                d.firstAparition === hero.firstAparition ||
+                d.dateAparition === hero.dateAparition ||
+                d.name === hero.name ||
+                d.alias === hero.alias
+              ),
+          ) ?? hero,
       );
 
-      if (JSON.stringify(heroJSONData) == JSON.stringify(newHeroData)) {
+      if (JSON.stringify(heroParsedData) == JSON.stringify(newHeroData)) {
         res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-        res.end(
-          "The 'id' or 'name' does not coincide with the data, try to check the 'id' or 'name' using GET on /heroes or /villain",
-        );
+        res.end(PutFailedPage);
         return;
       }
 
       const heroForWrite = JSON.stringify(newHeroData);
-      fs.writeFile(heroDataPath, heroForWrite);
+      console.log(newHeroData);
+      //fs.writeFile(heroDataPath, heroForWrite);
       res.writeHead(201, { "Content-Type": "application/json; charset=utf-8" });
       res.end(heroForWrite);
     }
@@ -62,19 +74,29 @@ const onPutMethod = async (res, data) => {
       const villainParsedData = JSON.parse(await fs.readFile(villainDataPath));
       const newVillainData = villainParsedData.map(
         (villain) =>
-          data.find((d) => d.id == villain.id && d.name == villain.name) ??
-          villain,
+          data.find(
+            (d) =>
+              d.id === villain.id &&
+              d.type === villain.type &&
+              !(
+                d.image === villain.image ||
+                d.publisher === villain.publisher ||
+                d.firstAparition === villain.firstAparition ||
+                d.dateAparition === villain.dateAparition ||
+                d.name === villain.name ||
+                d.alias === villain.alias
+              ),
+          ) ?? villain,
       );
 
       if (JSON.stringify(villainParsedData) == JSON.stringify(newVillainData)) {
         res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-        res.end(
-          "The 'id' or 'name' does not coincide with the data, try to check the 'id' or 'name' using GET on /heroes or /villain",
-        );
+        res.end(PutFailedPage);
         return;
       }
       const villainForWrite = JSON.stringify(newVillainData);
-      fs.writeFile(villainDataPath, villainForWrite);
+      console.log(newVillainData);
+      //fs.writeFile(villainDataPath, villainForWrite);
       res.writeHead(201, { "Content-Type": "application/json; charset=utf-8" });
       res.end(villainForWrite);
     }

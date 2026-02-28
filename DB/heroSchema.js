@@ -1,5 +1,5 @@
 const character = {
-  //id: "string", => this must be added from by the server
+  //id: "string", => this must be added by the server
   image: "string",
   publisher: "string",
   firstAparition: "string",
