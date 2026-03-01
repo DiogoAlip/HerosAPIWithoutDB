@@ -1,6 +1,10 @@
 const fs = require("fs/promises");
 const path = require("path");
+
 const dataSchemaCheker = require("../helpers/dataSchemaChecker");
+const replaceData = require("../helpers/replaceData.js");
+const findDuplicatesInData = require("../helpers/findDuplicatesInData.js");
+
 const heroDataPath = path.join(__dirname, "../DB/HeroData.json");
 const villainDataPath = path.join(__dirname, "../DB/VillianData.json");
 const PutFailedPath = path.join(__dirname, "../routes/summary/PutFailed.html");
@@ -40,63 +44,38 @@ const onPutMethod = async (res, data) => {
 
     if (isItDataForHero) {
       const heroParsedData = JSON.parse(await fs.readFile(heroDataPath));
-      const newHeroData = heroParsedData.map(
-        (hero) =>
-          data.find(
-            (d) =>
-              d.id === hero.id &&
-              d.type === hero.type &&
-              !(
-                d.image === hero.image ||
-                d.publisher === hero.publisher ||
-                d.firstAparition === hero.firstAparition ||
-                d.dateAparition === hero.dateAparition ||
-                d.name === hero.name ||
-                d.alias === hero.alias
-              ),
-          ) ?? hero,
-      );
-
-      if (JSON.stringify(heroParsedData) == JSON.stringify(newHeroData)) {
+      const newHeroData = await replaceData(data, heroParsedData);
+      const { isDuplicates } = findDuplicatesInData(newHeroData);
+      if (
+        JSON.stringify(heroParsedData) === JSON.stringify(newHeroData) ||
+        isDuplicates.includes(true)
+      ) {
         res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
         res.end(PutFailedPage);
         return;
       }
 
-      const heroForWrite = JSON.stringify(newHeroData);
       console.log(newHeroData);
-      //fs.writeFile(heroDataPath, heroForWrite);
+      const heroForWrite = JSON.stringify(newHeroData);
+      fs.writeFile(heroDataPath, heroForWrite);
       res.writeHead(201, { "Content-Type": "application/json; charset=utf-8" });
       res.end(heroForWrite);
     }
 
     if (isItDataForVillain) {
       const villainParsedData = JSON.parse(await fs.readFile(villainDataPath));
-      const newVillainData = villainParsedData.map(
-        (villain) =>
-          data.find(
-            (d) =>
-              d.id === villain.id &&
-              d.type === villain.type &&
-              !(
-                d.image === villain.image ||
-                d.publisher === villain.publisher ||
-                d.firstAparition === villain.firstAparition ||
-                d.dateAparition === villain.dateAparition ||
-                d.name === villain.name ||
-                d.alias === villain.alias
-              ),
-          ) ?? villain,
-      );
-
-      if (JSON.stringify(villainParsedData) == JSON.stringify(newVillainData)) {
+      const newVillainData = await replaceData(data, villainParsedData);
+      const { isDuplicates } = findDuplicatesInData(newVillainData);
+      if (
+        JSON.stringify(villainParsedData) === JSON.stringify(newVillainData) ||
+        isDuplicates.includes(true)
+      ) {
         res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
         res.end(PutFailedPage);
         return;
       }
       const villainForWrite = JSON.stringify(newVillainData);
-      console.log(newVillainData);
-      //fs.writeFile(villainDataPath, villainForWrite);
+      fs.writeFile(villainDataPath, villainForWrite);
       res.writeHead(201, { "Content-Type": "application/json; charset=utf-8" });
       res.end(villainForWrite);
     }
