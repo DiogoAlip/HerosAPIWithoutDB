@@ -1,13 +1,13 @@
 const PostMethod = require("../../methods/post.method.js");
 const PutMethod = require("../../methods/put.method.js");
 const { onGetMethodSummary } = require("../../methods/get.method.js");
-const { stringify } = require("querystring");
+const PatchMethod = require("../../methods/patch.method.js");
 
 const summary = (method, req, res) => {
   const baseURL = `http://${req.headers.host}`;
   const parsedUrl = new URL(req.url, baseURL);
 
-  const queryId = stringify(parsedUrl.searchParams.get("id"));
+  const queryId = parsedUrl.searchParams.get("id");
 
   switch (method) {
     case "GET":
@@ -20,7 +20,6 @@ const summary = (method, req, res) => {
       req.on("data", (chunk) => {
         bodyFromPost += chunk.toString();
       });
-
 
       req.on("end", async () => {
         if (!bodyFromPost.length) {
@@ -56,19 +55,39 @@ const summary = (method, req, res) => {
         bodyFromPatch += chunk.toString();
       });
 
-      if (queryId) {
+      if (!queryId.length) {
         req.on("end", () => {
           res.writeHead(400, { "Content-Type": "text/html; charset=uft-8" });
           res.end("The query 'id' did not was provided");
         });
-      } else {
-        req.on("end", () => {
-          res.writeHead(201, {
-            "Content-Type": "application/json; charset=utf-8",
-          });
-          res.end(JSON.stringify());
-        });
+        return;
       }
+
+      req.on("end", async () => {
+        const data = JSON.parse(bodyFromPatch);
+
+        if (Array.isArray(data)) {
+          res.writeHead(400, {
+            "Content-Type": "text/html; charset=utf-8",
+          });
+          res.end("The body is an Array, the type must be an Object");
+          return;
+        }
+
+        const dataWrited = await PatchMethod(data, queryId);
+        if (!dataWrited) {
+          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
+          res.end(
+            "The character with that 'id' does not exist or the body dont add a diferent value",
+          );
+          return;
+        }
+
+        res.writeHead(201, {
+          "Content-Type": "application/json; charset=utf-8",
+        });
+        res.end(JSON.stringify(dataWrited));
+      });
 
       break;
     case "DELETE":
