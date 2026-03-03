@@ -45,6 +45,16 @@ const summary = (method, req, res) => {
         }
         const data = JSON.parse(bodyFromPut);
         const dataArray = Array.isArray(data) ? data : [data];
+
+        console.log(dataArray.some((data) => data.type));
+
+        if (dataArray.some((data) => data.type)) {
+          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
+          res.end(
+            "The body dont must have the property 'type', Do you want to add a new hero?",
+          );
+        }
+
         PutMethod(res, dataArray);
       });
       break;
