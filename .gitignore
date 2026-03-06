@@ -117,7 +117,7 @@ dist
 # DynamoDB Local files
 .dynamodb/
 DB/SummaryData.json
-DB/CharatersData.json
+DB/CharactersData.json
 
 # Firebase cache directory
 .firebase/
