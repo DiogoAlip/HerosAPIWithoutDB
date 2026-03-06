@@ -3,7 +3,7 @@ const { writeFile, readFile } = require("fs/promises");
 const SummaryDefault = require("../DB/summarySchema.js");
 
 const initDB = async () => {
-  const principalDBs = ["HeroData", "VillianData", "SummaryData"];
+  const principalDBs = ["CharactersData", "SummaryData"];
 
   for (const db of principalDBs) {
     const dbPath = path.join(__dirname, `../DB/${db}.json`);

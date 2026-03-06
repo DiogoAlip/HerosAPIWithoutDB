@@ -1,28 +1,22 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-const heroDataPath = path.join(__dirname, "../DB/HeroData.json");
-const villianDataPath = path.join(__dirname, "../DB/VillianData.json");
+const CharactersDataPath = path.join(__dirname, "../DB/CharactersData.json");
 
 const dataDuplicatesChecker = async (data) => {
   try {
-    const herosData = JSON.parse(await fs.readFile(heroDataPath, "utf-8"));
-    const villianData = JSON.parse(await fs.readFile(villianDataPath, "utf-8"));
+    const CharactersData = JSON.parse(
+      await fs.readFile(CharactersDataPath, "utf-8"),
+    );
 
     const validators = data.map((item) => {
-      const repitedHeros = herosData.filter(
-        (hero) =>
-          hero.alias == item.alias ||
-          hero.name == item.name ||
-          hero.image == item.image,
+      const repitedCharacters = CharactersData.filter(
+        (character) =>
+          character.alias === item.alias ||
+          character.name === item.alias ||
+          character.image === item.image,
       );
-      const repitedVillains = villianData.filter(
-        (villian) =>
-          villian.alias == item.alias ||
-          villian.name == item.name ||
-          villian.image == item.image,
-      );
-      return !!repitedHeros.length || !!repitedVillains.length;
+      return !!repitedCharacters;
     });
     return validators;
   } catch (error) {

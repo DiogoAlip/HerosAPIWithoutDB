@@ -1,0 +1,32 @@
+[
+  {
+    "id": "DC-1",
+    "image": "https://static.wikia.nocookie.net/batman/images/b/b6/4214608-bm_cv37_large.jpg/revision/latest?cb=20200307171328&path-prefix=es",
+    "publisher": "DC",
+    "dateAparition": "1940-04-25",
+    "alias": "Joker",
+    "name": "Jack Napier",
+    "firstAparition": "Batman #1",
+    "type": "villain"
+  },
+  {
+    "id": "DC-2",
+    "image": "url",
+    "publisher": "DC",
+    "dateAparition": "1940-04-01",
+    "alias": "Lex Luthor",
+    "name": "Alexander Joseph Luthor",
+    "firstAparition": "Action Comics #23",
+    "type": "villain"
+  },
+  {
+    "id": "Marvel-1",
+    "image": "https://comicvine.gamespot.com/a/uploads/scale_small/12/124259/8126579-amazing_spider-man_vol_5_54_stormbreakers_variant_textless.jpg",
+    "publisher": "Marvel",
+    "dateAparition": "1962-08-01",
+    "alias": "Spider-man",
+    "name": "Peter Parker",
+    "firstAparition": "Amazing Fantasy #15",
+    "type": "hero"
+  }
+]
