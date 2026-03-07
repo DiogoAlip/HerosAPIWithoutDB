@@ -12,9 +12,24 @@ const onPostMethod = async (res, data) => {
   }
 
   const itAlreadyExists = await dataDuplicatesChecker(data);
-  if (itAlreadyExists.includes(true)) {
+  if (itAlreadyExists.every((item) => item === true)) {
     res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-    res.end("The charater already exist");
+    res.end("The charater(s) already exist");
+    return;
+  }
+
+  if (itAlreadyExists.includes(true)) {
+    const RepeatedDataIndexes = itAlreadyExists
+      .map((item, index) => (item === true ? index : null))
+      .filter((item) => item != null);
+    const UnRepeatedData = data.filter(
+      (_, index) => !RepeatedDataIndexes.includes(index),
+    );
+    const dataWithId = await writeNewDataOnBD(UnRepeatedData);
+    res.writeHead(201, {
+      "Content-Type": "application/json; charset=utf-8",
+    });
+    res.end(JSON.stringify(dataWithId));
     return;
   }
 
