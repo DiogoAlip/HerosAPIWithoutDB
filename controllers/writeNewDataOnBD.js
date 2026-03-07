@@ -22,7 +22,10 @@ const writeNewDataOnBD = async (dataForWrite) => {
     }));
 
     summaryNewCharacters(dataWithID);
-    await fs.writeFile(CharacterDataPath, [...CharactersData, dataWithID]);
+    await fs.writeFile(
+      CharacterDataPath,
+      JSON.stringify([...CharactersData, ...dataWithID]),
+    );
 
     return dataWithID;
   } catch (error) {

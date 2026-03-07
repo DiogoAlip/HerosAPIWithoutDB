@@ -16,7 +16,7 @@ const dataDuplicatesChecker = async (data) => {
           character.name === item.alias ||
           character.image === item.image,
       );
-      return !!repitedCharacters;
+      return !!repitedCharacters.length;
     });
     return validators;
   } catch (error) {
