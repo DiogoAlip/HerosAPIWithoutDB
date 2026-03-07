@@ -5,8 +5,6 @@ const dataSchemaCheker = require("../helpers/dataSchemaChecker");
 const replaceData = require("../helpers/replaceData.js");
 const findDuplicatesInData = require("../helpers/findDuplicatesInData.js");
 
-const heroDataPath = path.join(__dirname, "../DB/HeroData.json");
-const villainDataPath = path.join(__dirname, "../DB/VillianData.json");
 const CharactersDataPath = path.join(__dirname, "../DB/CharactersData.json");
 const PutFailedPath = path.join(__dirname, "../routes/summary/PutFailed.html");
 

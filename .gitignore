@@ -118,6 +118,7 @@ dist
 .dynamodb/
 DB/SummaryData.json
 DB/CharactersData.json
+DB/RecoveryData.json
 
 # Firebase cache directory
 .firebase/
