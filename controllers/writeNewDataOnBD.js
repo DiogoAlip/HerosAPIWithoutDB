@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
-const summaryNewCharacters = require("./summaryNewCharacters.js");
+const summaryOnChangeCharacters = require("./summaryOnChangeCharacters.js");
 
 const SummaryDataPath = path.join(__dirname, "../DB/SummaryData.json");
 const CharacterDataPath = path.join(__dirname, "../DB/CharactersData.json");
@@ -21,7 +21,7 @@ const writeNewDataOnBD = async (dataForWrite) => {
       ...data,
     }));
 
-    summaryNewCharacters(dataWithID);
+    summaryOnChangeCharacters(dataWithID);
     await fs.writeFile(
       CharacterDataPath,
       JSON.stringify([...CharactersData, ...dataWithID]),

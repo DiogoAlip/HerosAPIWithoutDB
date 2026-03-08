@@ -1,9 +1,15 @@
+// Interface changes = {
+//   publisher: "Marvel" | "DC",
+//   type: "hero" | "villain",
+//  .count ?? 1: number,
+// }[]
+
 const fs = require("fs/promises");
 const path = require("path");
 
 const SummaryDataPath = path.join(__dirname, "../DB/SummaryData.json");
 
-const summaryNewCharacters = async (charactersArray) => {
+const changeSummaryData = async (changes) => {
   const SummaryData = JSON.parse(await fs.readFile(SummaryDataPath, "utf-8"));
 
   const {
@@ -18,7 +24,7 @@ const summaryNewCharacters = async (charactersArray) => {
     TotalCharacters,
   } = SummaryData;
 
-  const newSummary = charactersArray.reduce(
+  const newSummary = changes.reduce(
     (acc, character) => {
       const isMarvel = character.publisher === "Marvel";
       const isDC = character.publisher === "DC";
@@ -26,19 +32,19 @@ const summaryNewCharacters = async (charactersArray) => {
       const isVillain = character.type === "villain";
 
       if (isMarvel) {
-        acc.MarvelCharacters++;
-        if (isHero) acc.MarvelHeroes++;
-        if (isVillain) acc.MarvelVillains++;
+        acc.MarvelCharacters += character.count ?? 1;
+        if (isHero) acc.MarvelHeroes += character.count ?? 1;
+        if (isVillain) acc.MarvelVillains += character.count ?? 1;
       } else if (isDC) {
-        acc.DCcharacters++;
-        if (isHero) acc.DCheroes++;
-        if (isVillain) acc.DCvillains++;
+        acc.DCcharacters += character.count ?? 1;
+        if (isHero) acc.DCheroes += character.count ?? 1;
+        if (isVillain) acc.DCvillains += character.count ?? 1;
       }
 
-      if (isHero) acc.TotalHeroes++;
-      if (isVillain) acc.TotalVillains++;
+      if (isHero) acc.TotalHeroes += character.count ?? 1;
+      if (isVillain) acc.TotalVillains += character.count ?? 1;
 
-      acc.TotalCharacters++;
+      acc.TotalCharacters += character.count ?? 1;
       return acc;
     },
     {
@@ -59,4 +65,4 @@ const summaryNewCharacters = async (charactersArray) => {
   return newSummary;
 };
 
-module.exports = summaryNewCharacters;
+module.exports = changeSummaryData;
