@@ -3,11 +3,13 @@ const findDuplicatesInArray = (dataArray) => {
     const duplicates = dataArray.map((dataToCheck, index) =>
       dataArray
         .toSpliced(index, 1)
-        .some(
-          (dataToCompare) =>
-            dataToCompare.alias === dataToCheck.alias ||
-            dataToCompare.name === dataToCheck.name ||
-            dataToCompare.image === dataToCheck.image,
+        .some((dataToCompare) =>
+          dataToCompare.type === dataToCheck.type ||
+          dataToCompare.publisher === dataToCheck.publisher
+            ? false
+            : dataToCompare.alias === dataToCheck.alias ||
+              dataToCompare.name === dataToCheck.name ||
+              dataToCompare.image === dataToCheck.image,
         ),
     );
     return {

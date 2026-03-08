@@ -3,6 +3,7 @@
 //   type: "hero" | "villain",
 //  .count ?? 1: number,
 // }[]
+// the changes can be character data type
 
 const fs = require("fs/promises");
 const path = require("path");

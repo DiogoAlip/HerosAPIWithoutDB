@@ -4,6 +4,7 @@ const path = require("path");
 const dataSchemaCheker = require("../helpers/dataSchemaChecker");
 const replaceData = require("../helpers/replaceData.js");
 const findDuplicatesInData = require("../helpers/findDuplicatesInData.js");
+const changeSummaryData = require("../controllers/summaryOnChangeCharacters.js");
 
 const CharactersDataPath = path.join(__dirname, "../DB/CharactersData.json");
 const PutFailedPath = path.join(__dirname, "../routes/summary/PutFailed.html");
@@ -52,6 +53,18 @@ const onPutMethod = async (res, data) => {
       res.end(PutFailedPage);
       return;
     }
+
+    const commingData = data.filter((dat) =>
+      characterParsedData.find((character) => character.id === dat.id),
+    );
+
+    const leavingData = characterParsedData
+      .filter((character) => data.find((dat) => dat.id === character.id))
+      .map((character) => ({ ...character, count: -1 }));
+
+    const registerNewSummary = commingData.concat(leavingData);
+    await changeSummaryData(registerNewSummary);
+
     const characterForWrite = JSON.stringify(newCharacterData);
     fs.writeFile(CharactersDataPath, characterForWrite);
     res.writeHead(201, { "Content-Type": "application/json; charset=utf-8" });
