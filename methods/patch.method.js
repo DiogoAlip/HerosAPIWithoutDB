@@ -2,6 +2,7 @@ const isTheSameObject = require("../helpers/compareObjects.js");
 
 const fs = require("fs/promises");
 const path = require("path");
+const changeSummaryData = require("../controllers/summaryOnChangeCharacters.js");
 
 const CharactersDataPath = path.join(__dirname, "../DB/CharactersData.json");
 
@@ -14,16 +15,27 @@ const onPatchMethod = async (data, id) => {
 
   if (!CharacterDataById) return null;
 
-  const newCharater = { ...CharacterDataById, ...data };
-  const isArepeatedCharacter = isTheSameObject(newCharater, CharacterDataById);
+  const newCharacter = { ...CharacterDataById, ...data };
+  const isArepeatedCharacter = isTheSameObject(newCharacter, CharacterDataById);
 
   if (isArepeatedCharacter) return null;
 
   const newDataForWrite = CharactersData.map((character) =>
-    character.id === id ? newCharater : character,
+    character.id === id ? newCharacter : character,
   );
+  if (
+    newCharacter.type !== CharacterDataById.type ||
+    newCharacter.publisher !== CharacterDataById.publisher
+  ) {
+    console.log(
+      await changeSummaryData([
+        newCharacter,
+        { ...CharacterDataById, count: -1 },
+      ]),
+    );
+  }
   fs.writeFile(CharactersDataPath, JSON.stringify(newDataForWrite));
-  return newCharater;
+  return newCharacter;
 };
 
 module.exports = onPatchMethod;
