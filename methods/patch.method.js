@@ -27,12 +27,10 @@ const onPatchMethod = async (data, id) => {
     newCharacter.type !== CharacterDataById.type ||
     newCharacter.publisher !== CharacterDataById.publisher
   ) {
-    console.log(
-      await changeSummaryData([
-        newCharacter,
-        { ...CharacterDataById, count: -1 },
-      ]),
-    );
+    await changeSummaryData([
+      newCharacter,
+      { ...CharacterDataById, count: -1 },
+    ]);
   }
   fs.writeFile(CharactersDataPath, JSON.stringify(newDataForWrite));
   return newCharacter;

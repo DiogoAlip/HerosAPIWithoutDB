@@ -1,9 +1,10 @@
 const PostMethod = require("../../methods/post.method.js");
 const PutMethod = require("../../methods/put.method.js");
-const { onGetMethodSummary } = require("../../methods/get.method.js");
 const PatchMethod = require("../../methods/patch.method.js");
+const DeleteMethod = require("../../methods/delete.method.js");
+const { onGetMethodSummary } = require("../../methods/get.method.js");
 
-const summary = (method, req, res) => {
+const summary = async (method, req, res) => {
   const baseURL = `http://${req.headers.host}`;
   const parsedUrl = new URL(req.url, baseURL);
 
@@ -21,7 +22,7 @@ const summary = (method, req, res) => {
         bodyFromPost += chunk.toString();
       });
 
-      req.on("end", async () => {
+      req.on("end", () => {
         if (!bodyFromPost.length) {
           res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
           res.end("The body did not was provided");
@@ -38,7 +39,7 @@ const summary = (method, req, res) => {
         bodyFromPut += chunk.toString();
       });
 
-      req.on("end", async () => {
+      req.on("end", () => {
         if (!bodyFromPut.length) {
           res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
           res.end("The body did not was provided");
@@ -92,6 +93,33 @@ const summary = (method, req, res) => {
 
       break;
     case "DELETE":
+      if (!queryId.length) {
+        req.on("end", () => {
+          res.writeHead(400, { "Content-Type": "text/html; charset=uft-8" });
+          res.end("The query 'id' did not was provided");
+        });
+        return;
+      }
+
+      const DeletedCharacter = await DeleteMethod(queryId);
+
+      if (!DeletedCharacter) {
+        res.writeHead(404, {
+          "Content-Type": "application/json; charset=utf-8",
+        });
+        res.end(
+          JSON.stringify({
+            status: "404",
+            message: "The 'id' did not match with any data",
+          }),
+        );
+        return;
+      }
+
+      res.writeHead(201, { "Content-Type": "application/json; charset=utf-8" });
+      res.end(JSON.stringify(DeletedCharacter));
+
+      break;
     default:
       res.statusCode = 405;
       res.setHeader("Content-Type", "text/html; charset=utf-8");
