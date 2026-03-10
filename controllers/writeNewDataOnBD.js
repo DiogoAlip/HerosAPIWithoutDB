@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const summaryOnChangeCharacters = require("./summaryOnChangeCharacters.js");
+const { character } = require("../DB/heroSchema.js");
 
 const SummaryDataPath = path.join(__dirname, "../DB/SummaryData.json");
 const CharacterDataPath = path.join(__dirname, "../DB/CharactersData.json");
@@ -12,14 +13,54 @@ const writeNewDataOnBD = async (dataForWrite) => {
       await fs.readFile(CharacterDataPath, "utf-8"),
     );
 
-    const { MarvelCharacters, DCcharacters } = SummaryData;
-    const dataWithID = dataForWrite.map((data, index) => ({
-      id:
-        data.publisher == "Marvel"
-          ? `Marvel-${MarvelCharacters + index + 1}`
-          : `DC-${DCcharacters + index + 1}`,
-      ...data,
-    }));
+    const MarvelCharactersID = CharactersData.filter((character) =>
+      character.id.contain("Marvel"),
+    ).map((character) => character.id);
+
+    const DCCharactersID = CharactersData.filter((character) =>
+      character.id.contain("DC"),
+    ).map((character) => character.id);
+
+    let MarvelIDsUnused = [];
+    let DCIDsUnused = [];
+
+    for (
+      let index = 1;
+      MarvelIDsUnused.length >= dataForWrite.length &&
+      DCIDsUnused.length >= dataForWrite.length;
+      index++
+    ) {
+      const marvelIdToCheck = `Marvel-${index}`;
+      const dcIdToCheck = `DC-${index}`;
+
+      const marvelIdExists = MarvelCharactersID.includes(marvelIdToCheck);
+      const dcIdExists = DCCharactersID.includes(dcIdToCheck);
+
+      if (!marvelIdExists) {
+        MarvelIDsUnused.push(marvelIdToCheck);
+      }
+
+      if (!dcIdExists) {
+        DCIDsUnused.push(dcIdToCheck);
+      }
+    }
+
+    const marvelDataWithID = dataForWrite
+      .filter((character) => character.publisher === "Marvel")
+      .map((data, index) => ({
+        id: MarvelIDsUnused[index],
+        ...data,
+      }));
+
+    const dcDataWithID = dataForWrite
+      .filter((character) => character.publisher === "DC")
+      .map((data, index) => ({
+        id: DCIDsUnused[index],
+        ...data,
+      }));
+
+    const dataWithID = marvelDataWithID.concat(dcDataWithID);
+    console.log(MarvelIDsUnused, DCIDsUnused);
 
     summaryOnChangeCharacters(dataWithID);
     await fs.writeFile(
