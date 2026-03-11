@@ -1,14 +1,14 @@
 # HerosAPIWithoutDB
 
-Un proyecto de API RESTful construido puramente con Node.js nativo (sin frameworks como Express) que simula una base de datos utilizando el sistema de archivos (ficheros JSON). 
+A RESTful API project built purely with native Node.js (without frameworks like Express) that simulates a database using the file system (JSON files).
 
-Esta API está diseñada para gestionar personajes de cómics (héroes y villanos de Marvel y DC), permitiendo realizar operaciones CRUD (Crear, Leer, Actualizar, Borrar) y visualizar resúmenes automáticos de la cantidad de personajes existentes según su tipo y editorial.
+This API is designed to manage comic book characters (Marvel and DC heroes and villains), allowing CRUD operations (Create, Read, Update, Delete) and displaying automatic summaries of the number of existing characters based on their type and publisher.
 
-## Características Principales
+## Main Features
 
-- **Sin dependencias externas**: Construido utilizando únicamente módulos nativos de Node.js como `http` y `fs`.
-- **Base de datos en JSON**: Utiliza archivos JSON locales para almacenar y persistir los datos (`CharactersData.json` y `SummaryData.json`).
-- **Endpoints disponibles**:
-  - `/characters`: Permite gestionar a los personajes mediante los métodos `GET`, `POST`, `PUT`, `PATCH` y `DELETE`. Soporta filtrado por `id`, `type` (hero/villain) y `publisher` (Marvel/DC).
-  - `/summary`: Muestra un resumen automático que suma y agrupa cuántos héroes y villanos hay de cada editorial.
-- **Sincronización automática**: Cuando se realizan cambios en los personajes, se actualiza dinámicamente el resumen de datos (`SummaryData`).
+- **No external dependencies**: Built using only native Node.js modules such as `http` and `fs`.
+- **JSON Database**: Uses local JSON files to store and persist data (`CharactersData.json` and `SummaryData.json`).
+- **Available endpoints**:
+  - `/characters`: Allows managing characters using `GET`, `POST`, `PUT`, `PATCH`, and `DELETE` methods. Supports filtering by `id`, `type` (hero/villain), and `publisher` (Marvel/DC).
+  - `/summary`: Displays an automatic summary that counts and groups how many heroes and villains exist for each publisher.
+- **Automatic synchronization**: When changes are made to the characters, the data summary (`SummaryData.json`) is dynamically updated.
