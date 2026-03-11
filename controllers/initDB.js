@@ -6,7 +6,7 @@ const changeSummaryData = require("./summaryOnChangeCharacters.js");
 const initDB = async () => {
   const charactersDbPath = path.join(__dirname, "../DB/CharactersData.json");
   const summaryDbPath = path.join(__dirname, "../DB/SummaryData.json");
-  
+
   let charactersExist = true;
   let summaryExist = true;
 
@@ -14,7 +14,9 @@ const initDB = async () => {
     const charsDataRaw = await readFile(charactersDbPath, "utf-8");
     const isArray = Array.isArray(JSON.parse(charsDataRaw));
     if (!isArray) {
-      console.log("The JSON CharactersData is corrupted, removing it and creating a void new");
+      console.log(
+        "The JSON CharactersData is corrupted, removing it and creating a void new",
+      );
       await writeFile(charactersDbPath, "[]");
       charactersExist = false;
     }
@@ -32,12 +34,10 @@ const initDB = async () => {
     summaryExist = false;
   }
 
-  // If SummaryData didn't exist but CharactersData did, repopulate SummaryData
   if (charactersExist && !summaryExist) {
     const charactersDataRaw = await readFile(charactersDbPath, "utf-8");
     const charactersData = JSON.parse(charactersDataRaw);
-    
-    // We pass all the characters because changeSummaryData expects an array to reduce
+
     await changeSummaryData(charactersData);
     console.log("SummaryData populated with existing CharactersData");
   }
