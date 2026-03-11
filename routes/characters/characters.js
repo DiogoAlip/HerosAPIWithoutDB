@@ -1,6 +1,6 @@
 const { onGetMethodCharacter } = require("../../methods/get.method");
 
-const heroes = async (method, req, res) => {
+const characters = async (method, req, res) => {
   const baseURL = `http://${req.headers.host}`;
   const parseUrl = new URL(req.url, baseURL);
 
@@ -21,4 +21,4 @@ const heroes = async (method, req, res) => {
   });
 };
 
-module.exports = heroes;
+module.exports = characters;
