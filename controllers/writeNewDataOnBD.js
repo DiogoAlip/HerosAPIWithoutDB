@@ -46,7 +46,7 @@ const writeNewDataOnBD = async (dataForWrite) => {
       .filter((character) => character.publisher === "Marvel")
       .map((data, index) => ({
         id: MarvelIDsUnused[index],
-        slug: data.alias.concat(data.name).toLowerCase().replace(/ /g, "-"),
+        slug: `${data.alias} ${data.name}`.toLowerCase().replace(/ /g, "-"),
         ...data,
       }));
 
@@ -54,7 +54,7 @@ const writeNewDataOnBD = async (dataForWrite) => {
       .filter((character) => character.publisher === "DC")
       .map((data, index) => ({
         id: DCIDsUnused[index],
-        slug: data.alias.concat(data.name).toLowerCase().replace(/ /g, "-"),
+        slug: `${data.alias} ${data.name}`.toLowerCase().replace(/ /g, "-"),
         ...data,
       }));
 
