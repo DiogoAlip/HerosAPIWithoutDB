@@ -1,14 +1,11 @@
 const fs = require("fs/promises");
 const path = require("path");
 const summaryOnChangeCharacters = require("./summaryOnChangeCharacters.js");
-const { character } = require("../DB/heroSchema.js");
 
-const SummaryDataPath = path.join(__dirname, "../DB/SummaryData.json");
 const CharacterDataPath = path.join(__dirname, "../DB/CharactersData.json");
 
 const writeNewDataOnBD = async (dataForWrite) => {
   try {
-    const SummaryData = JSON.parse(await fs.readFile(SummaryDataPath, "utf-8"));
     const CharactersData = JSON.parse(
       await fs.readFile(CharacterDataPath, "utf-8"),
     );
@@ -26,8 +23,8 @@ const writeNewDataOnBD = async (dataForWrite) => {
 
     for (
       let index = 1;
-      MarvelIDsUnused.length >= dataForWrite.length &&
-      DCIDsUnused.length >= dataForWrite.length;
+      MarvelIDsUnused.length <= dataForWrite.length ||
+      DCIDsUnused.length <= dataForWrite.length;
       index++
     ) {
       const marvelIdToCheck = `Marvel-${index}`;
@@ -49,6 +46,7 @@ const writeNewDataOnBD = async (dataForWrite) => {
       .filter((character) => character.publisher === "Marvel")
       .map((data, index) => ({
         id: MarvelIDsUnused[index],
+        slug: data.alias.concat(data.name).toLowerCase().replace(/ /g, "-"),
         ...data,
       }));
 
@@ -56,11 +54,11 @@ const writeNewDataOnBD = async (dataForWrite) => {
       .filter((character) => character.publisher === "DC")
       .map((data, index) => ({
         id: DCIDsUnused[index],
+        slug: data.alias.concat(data.name).toLowerCase().replace(/ /g, "-"),
         ...data,
       }));
 
     const dataWithID = marvelDataWithID.concat(dcDataWithID);
-    console.log(MarvelIDsUnused, DCIDsUnused);
 
     summaryOnChangeCharacters(dataWithID);
     await fs.writeFile(
