@@ -11,4 +11,5 @@ This API is designed to manage comic book characters (Marvel and DC heroes and v
 - **Available endpoints**:
   - `/characters`: Allows managing characters using `GET`, `POST`, `PUT`, `PATCH`, and `DELETE` methods. Supports filtering by `id`, `type` (hero/villain), and `publisher` (Marvel/DC).
   - `/summary`: Displays an automatic summary that counts and groups how many heroes and villains exist for each publisher.
+  - `/examples`: Displays a page that describes the API structure of the project and let test routes and methods like Swagger, but with basic functions.
 - **Automatic synchronization**: When changes are made to the characters, the data summary (`SummaryData.json`) is dynamically updated.
