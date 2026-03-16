@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Examples</title>
+  <link rel="stylesheet" href="/examples.css">
+</head>
+<body>
+  <div class="container">
+    <h1>API Documentation & Playground</h1>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="path">/summary</span>
+      </div>
+      <p class="description">Get summary of all characters</p>
+      <form class="test-form" onsubmit="handleSubmit(event, '/summary', 'GET')">
+        <button type="submit">Test GET</button>
+      </form>
+      <div class="response" id="response-summary-get" style="display:none"></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="path">/summary</span>
+      </div>
+      <p class="description">Add new summary data</p>
+      <form class="test-form" onsubmit="handleSubmit(event, '/summary', 'POST')">
+        <label>Request Body (JSON):</label>
+        <textarea placeholder='{"key": "value"}'></textarea>
+        <button type="submit">Test POST</button>
+      </form>
+      <div class="response" id="response-summary-post" style="display:none"></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method put">PUT</span>
+        <span class="path">/summary</span>
+      </div>
+      <p class="description">Replace summary data</p>
+      <form class="test-form" onsubmit="handleSubmit(event, '/summary', 'PUT')">
+        <label>Request Body (JSON):</label>
+        <textarea placeholder='{"key": "value"}'></textarea>
+        <button type="submit">Test PUT</button>
+      </form>
+      <div class="response" id="response-summary-put" style="display:none"></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method patch">PATCH</span>
+        <span class="path">/summary?id={id}</span>
+      </div>
+      <p class="description">Update summary data by id</p>
+      <div class="params-section">
+        <div class="params-list">
+          <span class="param"><span class="param-name">id</span> <span class="param-type">query</span></span>
+        </div>
+      </div>
+      <form class="test-form" onsubmit="handleSubmit(event, '/summary', 'PATCH')">
+        <label>Query Parameters (id required):</label>
+        <input type="text" name="id" placeholder="id">
+        <label>Request Body (JSON):</label>
+        <textarea placeholder='{"key": "value"}'></textarea>
+        <button type="submit">Test PATCH</button>
+      </form>
+      <div class="response" id="response-summary-patch" style="display:none"></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method delete">DELETE</span>
+        <span class="path">/summary?id={id}</span>
+      </div>
+      <p class="description">Delete summary data by id</p>
+      <div class="params-section">
+        <div class="params-list">
+          <span class="param"><span class="param-name">id</span> <span class="param-type">query</span></span>
+        </div>
+      </div>
+      <form class="test-form" onsubmit="handleSubmit(event, '/summary', 'DELETE')">
+        <label>Query Parameters (id required):</label>
+        <input type="text" name="id" placeholder="id">
+        <button type="submit">Test DELETE</button>
+      </form>
+      <div class="response" id="response-summary-delete" style="display:none"></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="path">/characters</span>
+      </div>
+      <p class="description">Get all characters with optional filters</p>
+      <div class="params-section">
+        <h4>Query Parameters:</h4>
+        <div class="params-list">
+          <span class="param"><span class="param-name">id</span> <span class="param-type">query</span></span>
+          <span class="param"><span class="param-name">type</span> <span class="param-type">query</span></span>
+          <span class="param"><span class="param-name">publisher</span> <span class="param-type">query</span></span>
+        </div>
+      </div>
+      <form class="test-form" onsubmit="handleSubmit(event, '/characters', 'GET')">
+        <label>Query Parameters (optional):</label>
+        <input type="text" name="id" placeholder="id">
+        <input type="text" name="type" placeholder="type">
+        <input type="text" name="publisher" placeholder="publisher">
+        <button type="submit">Test GET</button>
+      </form>
+      <div class="response" id="response-characters-get" style="display:none"></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="path">/characters</span>
+      </div>
+      <p class="description">Create new character(s)</p>
+      <form class="test-form" onsubmit="handleSubmit(event, '/characters', 'POST')">
+        <label>Request Body (JSON):</label>
+        <textarea placeholder='{"name": "Batman", "publisher": "DC"}'></textarea>
+        <button type="submit">Test POST</button>
+      </form>
+      <div class="response" id="response-characters-post" style="display:none"></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method put">PUT</span>
+        <span class="path">/characters</span>
+      </div>
+      <p class="description">Replace all characters</p>
+      <form class="test-form" onsubmit="handleSubmit(event, '/characters', 'PUT')">
+        <label>Request Body (JSON):</label>
+        <textarea placeholder='[{"name": "Batman", "publisher": "DC"}]'></textarea>
+        <button type="submit">Test PUT</button>
+      </form>
+      <div class="response" id="response-characters-put" style="display:none"></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method patch">PATCH</span>
+        <span class="path">/characters?id={id}</span>
+      </div>
+      <p class="description">Update character by id</p>
+      <div class="params-section">
+        <div class="params-list">
+          <span class="param"><span class="param-name">id</span> <span class="param-type">query</span></span>
+        </div>
+      </div>
+      <form class="test-form" onsubmit="handleSubmit(event, '/characters', 'PATCH')">
+        <label>Query Parameters (id required):</label>
+        <input type="text" name="id" placeholder="id">
+        <label>Request Body (JSON):</label>
+        <textarea placeholder='{"name": "Batman"}'></textarea>
+        <button type="submit">Test PATCH</button>
+      </form>
+      <div class="response" id="response-characters-patch" style="display:none"></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method delete">DELETE</span>
+        <span class="path">/characters?id={id}</span>
+      </div>
+      <p class="description">Delete character by id</p>
+      <div class="params-section">
+        <div class="params-list">
+          <span class="param"><span class="param-name">id</span> <span class="param-type">query</span></span>
+        </div>
+      </div>
+      <form class="test-form" onsubmit="handleSubmit(event, '/characters', 'DELETE')">
+        <label>Query Parameters (id required):</label>
+        <input type="text" name="id" placeholder="id">
+        <button type="submit">Test DELETE</button>
+      </form>
+      <div class="response" id="response-characters-delete" style="display:none"></div>
+    </div>
+
+  </div>
+
+  <script>
+    async function handleSubmit(event, path, method) {
+      event.preventDefault();
+      const form = event.target;
+      const responseDiv = document.getElementById(`response-${path.slice(1)}-${method.toLowerCase()}`);
+      
+      const formData = new FormData(form);
+      const queryParams = new URLSearchParams();
+      const bodyData = {};
+      
+      formData.forEach((value, key) => {
+        if (value && key) {
+          if (method === 'GET' || method === 'DELETE') {
+            queryParams.append(key, value);
+          } else {
+            try {
+              bodyData[key] = JSON.parse(value);
+            } catch {
+              bodyData[key] = value;
+            }
+          }
+        }
+      });
+
+      const hasBodyFields = Array.from(form.querySelectorAll('textarea, input'))
+        .some(el => el.value && el.name !== 'id');
+
+      let url = path;
+      if (queryParams.toString()) {
+        url += '?' + queryParams.toString();
+      }
+
+      const baseUrl = window.location.origin;
+      const fullUrl = `${baseUrl}/examples/api?_targetUrl=${encodeURIComponent(baseUrl + url)}&_targetMethod=${method}`;
+
+      responseDiv.style.display = 'block';
+      responseDiv.innerHTML = '<span class="response-header">Loading...</span>';
+
+      try {
+        const options = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        };
+
+        if (!['GET', 'HEAD'].includes(method)) {
+          if (Object.keys(bodyData).length > 0) {
+            options.body = JSON.stringify(bodyData);
+          } else if (hasBodyFields) {
+            const textarea = form.querySelector('textarea');
+            if (textarea && textarea.value) {
+              options.body = textarea.value;
+            }
+          }
+        }
+
+        const response = await fetch(fullUrl, options);
+        const text = await response.text();
+        
+        let formatted;
+        try {
+          const json = JSON.parse(text);
+          formatted = JSON.stringify(json, null, 2);
+        } catch {
+          formatted = text;
+        }
+
+        responseDiv.innerHTML = `<span class="response-header">Status: ${response.status}</span>\n${formatted}`;
+      } catch (error) {
+        responseDiv.innerHTML = `<span class="response-header">Error</span>\n${error.message}`;
+      }
+    }
+  </script>
+</body>
+</html>

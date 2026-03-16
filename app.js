@@ -2,6 +2,8 @@ const path = require("path");
 const fs = require("fs");
 const summary = require("./routes/summary/summary");
 const characters = require("./routes/characters/characters");
+const examples = require("./routes/examples/examples");
+const ExamplesCssPath = path.join(__dirname, "./routes/examples/examples.css");
 
 const NotFoundPagePath = path.join(
   __dirname,
@@ -34,6 +36,11 @@ const serverApp = (req, res) => {
       break;
     case "/characters":
       characters(method, req, res);
+      break;
+    case "/examples":
+    case "/examples.css":
+    case "/examples/api":
+      examples(method, req, res);
       break;
     default:
       res.statusCode = 404;
