@@ -8,8 +8,12 @@ const onGetMethodSummary = async (res) => {
     res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
     res.end(summaryData);
   } catch (error) {
-    res.writeHead(500, { "Content-Type": "text/html; charset=utf-8" });
-    res.end(`<h1>Iternal Server Error</h1><p>${error.message}</p>`);
+    res.writeHead(500, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(
+      JSON.stringify({
+        error,
+      }),
+    );
   }
   return;
 };
@@ -58,8 +62,12 @@ const onGetMethodCharacter = async (res, query) => {
       );
     }
   } catch (error) {
-    res.writeHead(500, { "Content-Type": "text/html; charset=utf-8" });
-    res.end(`<h1>Iternal Server Error</h1><p>${error.message}</p>`);
+    res.writeHead(500, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(
+      JSON.stringify({
+        error,
+      }),
+    );
   }
 };
 

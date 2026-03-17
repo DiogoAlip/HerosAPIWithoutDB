@@ -30,8 +30,12 @@ const characters = async (method, req, res) => {
 
       req.on("end", () => {
         if (!bodyFromPost.length) {
-          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-          res.end("The body did not was provided");
+          res.writeHead(400, {
+            "Content-Type": "application/json; charset=utf-8",
+          });
+          res.end(
+            JSON.stringify({ errorMessage: "The body did not was provided" }),
+          );
         }
         const data = JSON.parse(bodyFromPost);
         const dataArray = Array.isArray(data) ? data : [data];
@@ -48,8 +52,12 @@ const characters = async (method, req, res) => {
 
       req.on("end", () => {
         if (!bodyFromPut.length) {
-          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-          res.end("The body did not was provided");
+          res.writeHead(400, {
+            "Content-Type": "application/json; charset=utf-8",
+          });
+          res.end(
+            JSON.stringify({ errorMessage: "The body did not was provided" }),
+          );
         }
         const data = JSON.parse(bodyFromPut);
         const dataArray = Array.isArray(data) ? data : [data];
@@ -67,8 +75,14 @@ const characters = async (method, req, res) => {
 
       if (!queryId) {
         req.on("end", () => {
-          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-          res.end("The query 'id' did not was provided");
+          res.writeHead(400, {
+            "Content-Type": "application/json; charset=utf-8",
+          });
+          res.end(
+            JSON.stringify({
+              errorMessage: "The query 'id' did not was provided",
+            }),
+          );
         });
         return;
       }
@@ -78,17 +92,26 @@ const characters = async (method, req, res) => {
 
         if (Array.isArray(data)) {
           res.writeHead(400, {
-            "Content-Type": "text/html; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8",
           });
-          res.end("The body is an Array, the type must be an Object");
+          res.end(
+            JSON.stringify({
+              errorMessage: "The body is an Array, the type must be an Object",
+            }),
+          );
           return;
         }
 
         const dataWrited = await PatchMethod(data, queryId);
         if (!dataWrited) {
-          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
+          res.writeHead(400, {
+            "Content-Type": "application/json; charset=utf-8",
+          });
           res.end(
-            "The character with that 'id' does not exist or the body dont add a diferent value",
+            JSON.stringify({
+              errorMessage:
+                "The character with that 'id' does not exist or the body dont add a diferent value",
+            }),
           );
           return;
         }
@@ -104,8 +127,14 @@ const characters = async (method, req, res) => {
     case "DELETE":
       if (!queryId) {
         req.on("end", () => {
-          res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-          res.end("The query 'id' did not was provided");
+          res.writeHead(400, {
+            "Content-Type": "application/json; charset=utf-8",
+          });
+          res.end(
+            JSON.stringify({
+              errorMessage: "The query 'id' did not was provided",
+            }),
+          );
         });
         return;
       }
@@ -132,8 +161,8 @@ const characters = async (method, req, res) => {
 
     default:
       res.statusCode = 405;
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.end("<h1>This Method is Not Accesible</h1>");
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      res.end(JSON.stringify({ errorMessage: "This Method is Not Accesible" }));
   }
 };
 

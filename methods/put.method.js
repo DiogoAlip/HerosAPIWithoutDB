@@ -7,14 +7,12 @@ const findDuplicatesInData = require("../helpers/findDuplicatesInData.js");
 const changeSummaryData = require("../controllers/summaryOnChangeCharacters.js");
 
 const CharactersDataPath = path.join(__dirname, "../DB/CharactersData.json");
-const PutFailedPath = path.join(__dirname, "../routes/summary/PutFailed.html");
 
 const onPutMethod = async (res, data) => {
-  const PutFailedPage = await fs.readFile(PutFailedPath);
   const isIncludeId = data.filter((dat) => !dat["id"]);
 
   if (!!isIncludeId.length) {
-    res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
+    res.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
     res.end(
       JSON.stringify([
         {
@@ -33,8 +31,8 @@ const onPutMethod = async (res, data) => {
   });
 
   if (check.some((checkItem) => typeof checkItem === "string")) {
-    res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-    res.end(check.join("\n"));
+    res.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(JSON.stringify({ errorMessage: check.join("\n") }));
     return;
   }
 
@@ -49,8 +47,13 @@ const onPutMethod = async (res, data) => {
         JSON.stringify(newCharacterData) ||
       isDuplicates.includes(true)
     ) {
-      res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-      res.end(PutFailedPage);
+      res.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
+      res.end(
+        JSON.stringify({
+          errorMessage:
+            "The 'image', 'alias' or 'name' repeat with other character; 'id' or 'type' does not coincide with the data; check '/villain or /heroes' ",
+        }),
+      );
       return;
     }
 

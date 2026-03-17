@@ -6,15 +6,15 @@ const onPostMethod = async (res, data) => {
   const check = data.map((dat) => dataSchemaCheker(dat));
 
   if (check.some((checkItem) => typeof checkItem === "string")) {
-    res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-    res.end(check.join("\n"));
+    res.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(JSON.stringify({ errorMessage: check.join("\n") }));
     return;
   }
 
   const itAlreadyExists = await dataDuplicatesChecker(data);
   if (itAlreadyExists.every((item) => item === true)) {
-    res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-    res.end("The charater(s) already exist");
+    res.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(JSON.stringify({ errorMessage: "The charater(s) already exist" }));
     return;
   }
 
